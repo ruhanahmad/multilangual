@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:multitranslation/loginPage.dart';
+import 'package:multitranslation/twoThreeSeconds.dart';
 
 void main() {
    WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: LoginScreen(),
+      child: VeryFirstScreen(),
     );
   }
 }
