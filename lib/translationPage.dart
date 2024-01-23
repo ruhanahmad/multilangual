@@ -6,7 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:multitranslation/controller/userController.dart';
 import 'package:multitranslation/loginPage.dart';
+import 'package:multitranslation/quizez.dart';
 
 
 
@@ -22,6 +24,7 @@ class NextPage extends StatefulWidget {
 
 class _NextPageState extends State<NextPage> {
   TextEditingController searchController = TextEditingController();
+   final userController = Get.put(UserController());
   List<String> dataList = [];
  Map<String, dynamic> translations = {};
   FlutterTts flutterTts = FlutterTts(); 
@@ -30,6 +33,7 @@ class _NextPageState extends State<NextPage> {
     // TODO: implement initState
     super.initState();
      flutterTts.setLanguage("en-US");
+     print(widget.token);
 
   }
 
@@ -59,7 +63,7 @@ class _NextPageState extends State<NextPage> {
         // final Map<String, dynamic> userData = data['data']['user'];
         // Login successful, redirect to splash screen
         // Navigator.push(
-        //   context,
+        //   context,heade
         //   MaterialPageRoute(builder: (context) => LoginScreen()),
         // );
         print(message);
@@ -73,9 +77,40 @@ class _NextPageState extends State<NextPage> {
   }
   @override
   Widget build(BuildContext context) {
+    final userController = Get.put(UserController());
     return Scaffold(
       appBar: AppBar(
         actions: [
+    //            ElevatedButton(
+    //   onPressed: () async{
+    //     // Handle button press
+    // Get.to(()=>QuizPage());
+    //   },
+    //   style: ElevatedButton.styleFrom(
+    //     primary: Colors.white,
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(20.0), // Border radius
+    //     ),
+    //     minimumSize: Size(40.w, 29.h), // Width and height
+        
+    //   ),
+    //   child: Text('Learning Plan',style: TextStyle(color: Color(0xFF573AF5,),fontSize: 12),),
+    // ),
+         ElevatedButton(
+      onPressed: () async{
+        // Handle button press
+    Get.to(()=>QuizPage(token:widget.token));
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0), // Border radius
+        ),
+        minimumSize: Size(20.w, 29.h), // Width and height
+        
+      ),
+      child: Text('Exercises and Quizez',style: TextStyle(color: Color(0xFF573AF5),fontSize: 12),),
+    ),
           ElevatedButton(
       onPressed: () async{
         // Handle button press
@@ -143,41 +178,64 @@ class _NextPageState extends State<NextPage> {
             ),
           ],
         ),
-                 Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  
-                  border: Border.all(width: 1.w,color: Color(0xFF832CE5
-),),
-                ),
-                width: 299.w,
-                height: 44.h,
-                child: TextField(
-                   style: TextStyle(color: Colors.black),
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search',
-              border: InputBorder.none,
-             suffixIcon: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  if (searchController.text.isNotEmpty) {
-                
-                    setState(() {
-                          dataList.length = 0;
-                    });
-                    fetchExactTranslation(searchController.text, widget.selectedLanguage,widget.token!);
-                  }
-                },
-              ),
-              
-            ),
-            onTap: () {
-             
-              _fetchSuggestions(widget.selectedLanguage,widget.token!);
-            },
-          ),
-              ),
+                 Row(
+                   children: [
+                     SizedBox(width: 10,),
+                     Container(
+                                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      
+                      border: Border.all(width: 1.w,color: Color(0xFF832CE5
+                     ),),
+                                     ),
+                                     width: 240.w,
+                                     height: 44.h,
+                                     child: TextField(
+                       style: TextStyle(color: Colors.black),
+                                 controller: searchController,
+                                 decoration: InputDecoration(
+                                   hintText: 'Search',
+                                   border: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                     icon: Icon(Icons.search),
+                                     onPressed: () {
+                      if (searchController.text.isNotEmpty) {
+                                     
+                        setState(() {
+                              dataList.length = 0;
+                        });
+                        fetchExactTranslation(searchController.text, widget.selectedLanguage,widget.token!);
+                      }
+                                     },
+                                   ),
+                                   
+                                 ),
+                                 onTap: () {
+                                  
+                                   _fetchSuggestions(widget.selectedLanguage,widget.token!);
+                                 },
+                               ),
+                                   ),
+                                   SizedBox(width: 20,),
+                                     ElevatedButton(
+      onPressed: () async{
+      
+   await  _getTranslation(userController.words.value, widget.selectedLanguage);
+      },
+      style: ElevatedButton.styleFrom(
+        primary:  Color(0xFF832CE5
+                ), // Button color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0), // Border radius
+        ),
+        minimumSize: Size(80.w, 29.h), // Width and height
+        
+      ),
+      child: Text('Search',style: TextStyle(color: Colors.white),),
+    ),
+                   ],
+                 ),
+
           // TextField(
           //   controller: searchController,
           //   decoration: InputDecoration(
@@ -213,8 +271,35 @@ class _NextPageState extends State<NextPage> {
                   return ListTile(
                     title: Text(dataList[index]),
                       onTap: () {
-                    _getTranslation(dataList[index], widget.selectedLanguage);
+                 //   _getTranslation(dataList[index], widget.selectedLanguage);
                   },
+                  trailing:   Obx(
+                    ()=> Checkbox(
+                                          value: userController.words
+                                                  .contains(
+                                                  dataList[index]
+                                                      
+                                                      )
+                                              ? true
+                                              : false,
+                                          onChanged: (val) {
+                                            if (userController.words
+                                                .contains(
+                                                dataList[index]
+                                                    
+                                                    )) {
+                                              userController.words.remove(
+                                                  dataList[index]
+                                                      
+                                                      );
+                                            } else {
+                                              userController.words.add(
+                                                dataList[index]
+                                                      
+                                                      );
+                                            }
+                                          }),
+                  ),
                   );
                 },
               ),
@@ -227,38 +312,59 @@ class _NextPageState extends State<NextPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+
+              
               Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width /2,
                 padding: EdgeInsets.all(16),
                 color: Color(0xFFB4ACFF),
-                child: Column(
+                child: 
+                Column(
                   children: [
-                    widget.selectedLanguage ==  "english" ? Text ("Soomaali") : widget.selectedLanguage ==  "soomaali"  ? Text ("English") :widget.selectedLanguage ==  "arabic"? Text("English"):Text(""),
-                  //  Text(widget.selectedLanguage ==  "english" ? "soomaali" ? widget.selectedLanguage ==  "english"  :"arabic"  ),
-                  //  Text(translations['soomaali'] != null ? 'Soomaali' : ''),
+               widget.selectedLanguage ==  "english" ? Text ("Soomaali") : widget.selectedLanguage ==  "soomaali"  ? Text ("English") :widget.selectedLanguage ==  "arabic"? Text("English"):Text(""),
+              Expanded(
+                         child: ListView.builder(
+                                 itemCount: translations.length,
+                                 itemBuilder: (context, index) {
+                                   final word = translationsData!.keys.elementAt(index);
+                                   print(word);
+                                   final translations = translationsData![word];
+                         
+                                   return
+
+                                   Column(children: [
+
+                   
+              
                  widget.selectedLanguage ==  "english"?    Text(translations['soomaali'] ?? ''): widget.selectedLanguage ==  "soomaali" ?Text(translations['english'] ?? ''):widget.selectedLanguage ==  "arabic" ?Text(translations['english'] ?? ''):Text(""),
-SizedBox(height: 20),
-            // IconButton(
-            //   icon: Icon(Icons.volume_up),
-            //   onPressed: () {
-            //     speakArabic("مرحبًا، هذا هو نص تجريبي.");
-            //   },
-            // ),
-Align(
-  alignment: Alignment.topRight,
-  child: IconButton(
-    icon: Icon(Icons.volume_up),
-    onPressed: () {
-   widget.selectedLanguage ==  "english"?    speak(translations['soomaali'],"so-SO"): widget.selectedLanguage ==  "soomaali" ?speak(translations['english'],"en-US"):widget.selectedLanguage ==  "arabic" ?speak(translations['english'],"en-US"):Text(""); // Replace with your dynamic text
-    },
-    // child: Text('Play Audio'),
-  ),
-),
-                 
+            
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.volume_up),
+                  onPressed: () {
+                 widget.selectedLanguage ==  "english"?    speak(translations['soomaali'],"so-SO"): widget.selectedLanguage ==  "soomaali" ?speak(translations['english'],"en-US"):widget.selectedLanguage ==  "arabic" ?speak(translations['english'],"en-US"):Text(""); // Replace with your dynamic text
+                  },
+                  // child: Text('Play Audio'),
+                ),
+              ),
+                                   ],);
+                                   
+                            
+                                
+                                 },
+                               ),
+                       ),
+              
+              
+                       
                   ],
                 ),
               ),
+
+
+            
               Container(
                  height: 200,
                 width: MediaQuery.of(context).size.width /2,
@@ -268,17 +374,50 @@ Align(
                   children: [
                       widget.selectedLanguage ==  "english" ? Text ("Arabic") : widget.selectedLanguage ==  "soomaali"  ? Text ("Arabic") :widget.selectedLanguage ==  "arabic"? Text("Soomaali"):Text(""),
                  //   Text(translations['arabic'] != null ? 'Arabic' : ''),
-                    widget.selectedLanguage ==  "english"?    Text(translations['arabic'] ?? ''): widget.selectedLanguage ==  "soomaali" ?Text(translations['arabic'] ?? ''):widget.selectedLanguage ==  "arabic" ?Text(translations['soomaali'] ?? ''):Text(""),
-                    Align(
-alignment: Alignment.topRight,
-                      child: IconButton(
-                         icon: Icon(Icons.volume_up),
-                        onPressed: () {
-                       widget.selectedLanguage ==  "english"?    speak(translations['arabic'],"ar"): widget.selectedLanguage ==  "soomaali" ?speak(translations['arabic'],"ar"):widget.selectedLanguage ==  "arabic" ?speak(translations['soomaali'],"so-SO"):Text(""); // Replace with your dynamic text
-                        },
-                        // child: Text('Play Audio'),
-                      ),
-                    ),
+//                     widget.selectedLanguage ==  "english"?    Text(translations['arabic'] ?? ''): widget.selectedLanguage ==  "soomaali" ?Text(translations['arabic'] ?? ''):widget.selectedLanguage ==  "arabic" ?Text(translations['soomaali'] ?? ''):Text(""),
+//                     Align(
+// alignment: Alignment.topRight,
+//                       child: IconButton(
+//                          icon: Icon(Icons.volume_up),
+//                         onPressed: () {
+//                        widget.selectedLanguage ==  "english"?    speak(translations['arabic'],"ar"): widget.selectedLanguage ==  "soomaali" ?speak(translations['arabic'],"ar"):widget.selectedLanguage ==  "arabic" ?speak(translations['soomaali'],"so-SO"):Text(""); // Replace with your dynamic text
+//                         },
+//                         // child: Text('Play Audio'),
+//                       ),
+//                     ),
+                      Expanded(
+                         child: ListView.builder(
+                                 itemCount: translations.length,
+                                 itemBuilder: (context, index) {
+                                   final word = translationsData!.keys.elementAt(index);
+                                   print(word);
+                                   final translations = translationsData![word];
+                         
+                                   return
+
+                                   Column(children: [
+
+                   
+              
+                  widget.selectedLanguage ==  "english"?    Text(translations['arabic'] ?? ''): widget.selectedLanguage ==  "soomaali" ?Text(translations['arabic'] ?? ''):widget.selectedLanguage ==  "arabic" ?Text(translations['soomaali'] ?? ''):Text(""),
+            
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.volume_up),
+                  onPressed: () {
+                 widget.selectedLanguage ==  "english"?    speak(translations['arabic'],"ar"): widget.selectedLanguage ==  "soomaali" ?speak(translations['arabic'],"ar"):widget.selectedLanguage ==  "arabic" ?speak(translations['soomaali'],"so-SO"):Text(""); // Replace with your dynamic text
+                  },
+                  // child: Text('Play Audio'),
+                ),
+              ),
+                                   ],);
+                                   
+                            
+                                
+                                 },
+                               ),
+                       ),
                   ],
                 ),
               ),
@@ -320,27 +459,37 @@ print(response.statusCode);
       print('Exception during API call: $e');
     }
   }
-
-  Future<void> _getTranslation(String word, String lang) async {
+ Map<String, dynamic>? translationsData ;
+  Future<void> _getTranslation(List<String> word, String lang) async {
     try {
       final response = await http.post(
         Uri.parse('https://translation.saeedantechpvt.com/api/app/get-translate'),
-        headers: {'Authorization': 'Bearer ${widget.token}'},
-        body: {'lang': lang, 'word': word},
+         headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${widget.token}'
+        },
+        // headers: {},
+        body:  jsonEncode({'lang': lang, 'word': word}),
       );
-
+print(response.statusCode);
+print(response.body);
       if (response.statusCode == 200) {
+
         final Map<String, dynamic> data = json.decode(response.body);
-        final Map<String, dynamic> translationsData = data['data']['translations'];
+         translationsData = data['data']['translations'];
 
         setState(() {
-          translations = translationsData;
+          translations = translationsData!;
         });
+         userController.words.clear();
       } else {
         Fluttertoast.showToast(msg: 'Failed to get translation. Please try again.');
+         final userController = Get.put(UserController());
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Error during translation. Please try again.');
+      Fluttertoast.showToast(msg: '${e}');
+       final userController = Get.put(UserController());
+      print(e);
     }
   }
 
