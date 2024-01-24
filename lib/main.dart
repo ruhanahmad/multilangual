@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:multitranslation/loginPage.dart';
 import 'package:multitranslation/twoThreeSeconds.dart';
-
-void main() {
+import 'package:get_storage/get_storage.dart';
+void main() async{
+  await GetStorage.init();
    WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -23,6 +24,11 @@ class MyApp extends StatelessWidget {
       builder: (_ , child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
+    //        localeResolutionCallback: (locale, supportedLocales) {
+    // return const Locale('en', ''); // Force LTR layout
+  // },
+  // locale: Get.deviceLocale, // Set the default locale
+  //      fallbackLocale: const Locale('en', 'US'),
           title: 'First Method',
           // You can use the library anywhere in the app even in theme
           theme: ThemeData(

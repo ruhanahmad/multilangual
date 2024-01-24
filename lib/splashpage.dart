@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:multitranslation/translationPage.dart';
+
+import 'controller/languageController.dart';
 
 
 
@@ -17,13 +20,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String selectedLanguage = '';
-
+  LanguageController _languageController = Get.put(LanguageController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+     GetBuilder<LanguageController>(builder: (_){
+
+      return      Scaffold(
       backgroundColor:  Color(0xFF832CE5
 ),
-      body: Center(
+      body: 
+      
+      Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -41,6 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   onPressed: () {
                     setState(() {
                       selectedLanguage = 'english';
+                       // _languageController.changeLocale('en');
                     });
                   },
                 ),
@@ -51,6 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   onPressed: () {
                     setState(() {
                       selectedLanguage = 'soomaali';
+                   //   _languageController.changeLocale('so');
                     });
                   },
                 ),
@@ -61,6 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   onPressed: () {
                     setState(() {
                       selectedLanguage = 'Arabic';
+                    //   _languageController.changeLocale('ar');
                     });
                   },
                 ),
@@ -111,6 +122,8 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+     },);
+  
   }
 }
 

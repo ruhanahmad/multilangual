@@ -35,6 +35,8 @@ class LoginScreen extends StatelessWidget {
               final Map<String, dynamic> data = json.decode(response.body);
         final String token = data['data']['token'];
         final Map<String, dynamic> userData = data['data']['user'];
+        print(userData);
+        print(token);
         // Login successful, redirect to splash screen
         // Navigator.push(
         //   context,

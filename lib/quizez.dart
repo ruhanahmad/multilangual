@@ -584,8 +584,9 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'controller/userController.dart';
 
 class QuizPage extends StatefulWidget {
+  String? language;
   String? token;
-  QuizPage({ required this.token});
+  QuizPage({ required this.token,required this.language});
 
   @override
   _QuizPageState createState() => _QuizPageState();
@@ -676,13 +677,13 @@ List<String> Corrects = [];
   }
 
   void nextQuestion() {
-    if (selectedAnswers[currentIndex].isNotEmpty && currentIndex < quizData.length - 1) {
+    if (selectedAnswers.isNotEmpty && currentIndex < quizData.length - 1) {
       setState(() {
         currentIndex++;
-       // selectedAnswer = ''; // Reset selected answer for the next question
+        selectedAnswers = ''; // Reset selected answer for the next question
          updateQuizProgress();
       });
-    } else if (selectedAnswers[currentIndex].isNotEmpty) {
+    } else if (selectedAnswers.isNotEmpty) {
       Fluttertoast.showToast(msg: 'Please Select atleast one');
       // Show an error message because no option is selected
       // showErrorDialog('Please select an answer before proceeding.');
@@ -690,20 +691,21 @@ List<String> Corrects = [];
   }
 
   void submitQuiz() {
-     if (selectedAnswers[currentIndex].isNotEmpty){
+     if (selectedAnswers.isNotEmpty){
        int correctAnswers = 0;
     int incorrectAnswers = 0;
 
-    for (int i = 0; i < quizData.length; i++) {
-      if ( quizData[i]["correct"]==selectedAnswers[0]) {
+   for (int i = 0; i < quizData.length; i++) {
+      print(quizData);
+      print(  Corrects);
+      if (quizData[i]["correct"] == Corrects[i]) {
         correctAnswers++;
-
       } else {
         incorrectAnswers++;
       }
       print(correctAnswers);
-      print(incorrectAnswers);
     }
+    
 updateQuizProgress();
     // Display results or navigate to results screen
     showDialog(
@@ -721,9 +723,32 @@ updateQuizProgress();
                 Container(height: 203.h,width: 189.w,decoration: BoxDecoration(
                   image: DecorationImage(image: AssetImage("asset/fram.png",),fit: BoxFit.contain)),),
                     Text(' ${(correctAnswers / quizData.length * 100).toStringAsFixed(2)}% Score',style: TextStyle(color: Color(0xFF4209BB),fontSize: 48),),
-                Text('Exam Completed Succesfully',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),), 
+                   
+               widget.language == "soomaali" ?      Text('Hambalyo! ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+               :
+               widget.language == "english" ?      Text('Congratulate !',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+               :
+                widget.language == "arabic" ?      Text('مبروك!  ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),) :Text("")
+               , 
+
+
+              widget.language == "english" ?    Text('Exam Completed Succesfully',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+              
+              :
+               widget.language == "soomaali" ? Text('Imtixaanki guul baad ku dhameysay',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+              
+              :
+              widget.language == "arabic" ? Text("اح االمتحان من االنتهاء ت",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),):Text("")
+              , 
                 SizedBox(height: 20,),   
-                Text('You Attempted  ${quizData.length} questions and  $correctAnswers are correct',style: TextStyle(color: Colors.black,fontSize: 25,), ),
+            widget.language == "english" ?      Text('You Attempted  ${quizData.length} questions and  $correctAnswers are answered correct'.tr,style: TextStyle(color: Colors.black,fontSize: 25,), )
+            
+            :
+             widget.language == "soomaali" ?  Text('Waxaad isku dayday  ${quizData.length} su aalood  $correctAnswers na si sax ah ayaad uga jawaabtay',style: TextStyle(color: Colors.black,fontSize: 25,), )
+             :
+              widget.language == "arabic" ? Text('لقد حاولت   ${quizData.length}  وتمت اإلجابة على  $correctAnswers منها بشكل صحيح',style: TextStyle(color: Colors.black,fontSize: 25,), ) :Text("")
+
+            
 
               //   LinearProgressIndicator(
               //   value: 50.0,
@@ -770,7 +795,9 @@ void calculateResults() {
         incorrectAnswers++;
       }
       print(correctAnswers);
-    }}
+    }
+    
+    }
    void _showLanguageOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -921,6 +948,10 @@ TextEditingController searchController = TextEditingController();
       onPressed: () async{
       //  dataList = 0;
   // await  _getTranslation(userController.words.value, widget.selectedLanguage);
+  setState(() {
+     dataList.length = 0;
+  });
+ 
     await  fetchQuizData(userController.nullList.value,selectedLanguage);
       },
       style: ElevatedButton.styleFrom(
@@ -1066,25 +1097,25 @@ Column(
                 //   ],
                 // ),
 
-                  ElevatedButton(
-              onPressed: () {
-                if (selectedAnswers.isNotEmpty) {
-                  if (currentIndex < quizData.length - 1) {
-                    setState(() {
-                      currentIndex++;
-                      selectedAnswers = "";
-                    });
-                  } else {
-                    // Calculate and display results
-                    calculateResults();
-                  }
-                } else {
-                  // Show an error message because no option is selected
-               //   showErrorDialog('Please select an answer before proceeding.');
-                }
-              },
-              child: Text(currentIndex < quizData.length - 1 ? 'Next' : 'Submit'),
-            ),
+            //       ElevatedButton(
+            //   onPressed: () {
+            //     if (selectedAnswers.isNotEmpty) {
+            //       if (currentIndex < quizData.length - 1) {
+            //         setState(() {
+            //           currentIndex++;
+            //           selectedAnswers = "";
+            //         });
+            //       } else {
+            //         // Calculate and display results
+            //         calculateResults();
+            //       }
+            //     } else {
+            //       // Show an error message because no option is selected
+            //    //   showErrorDialog('Please select an answer before proceeding.');
+            //     }
+            //   },
+            //   child: Text(currentIndex < quizData.length - 1 ? 'Next' : 'Submit'),
+            // ),
                 SizedBox(height: 16),
                 if (currentIndex < quizData.length - 1)
                   ElevatedButton(
@@ -1159,6 +1190,7 @@ class LanguageOption extends StatelessWidget {
           value: value,
           groupValue: groupValue,
           onChanged: onChanged,
+          activeColor: Colors.white,
         ),
         Text(text),
       ],
