@@ -576,9 +576,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:percent_indicator/percent_indicator.dart';
+
+import 'controller/userController.dart';
 
 class QuizPage extends StatefulWidget {
   String? token;
@@ -591,23 +594,61 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   final String apiUrl = "https://translation.saeedantechpvt.com/api/app/get-questions?word=help&type=english to soomaali";
   List<Map<String, dynamic>> quizData = [];
-  String selectedAnswer = '';
+  List<String> selectedAnswers = [];
+   String selectedAnswerss = "";
+   String groupValue = '';
   int currentIndex = 0;
   double quizProgress = 0.0;
+    List<String> dataList = [];
   @override
   void initState() {
     super.initState();
-    fetchQuizData();
+   // fetchQuizData();
   }
 
-  Future<void> fetchQuizData() async {
+
+final userController = Get.put(UserController());
+  Future<void> _fetchSuggestions(String query,String token) async {
+    print(token);
+    print(query);
     try {
-      final response = await http.post(Uri.parse("https://translation.saeedantechpvt.com/api/app/get-questions?word=help&type=english to soomaali"),
+      final response = await http.post(
+        Uri.parse('https://translation.saeedantechpvt.com/api/app/search-translate'),
+        headers: {
+          'Authorization':"Bearer " + token, // Replace with your actual auth token
+        },
+        body: {
+          'lang': query,
+          // 'query': query,
+        },
+      );
+print(response.statusCode);
+      if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+        List<dynamic> dataListFromApi = data['data'];
+
+        setState(() {
+          dataList = dataListFromApi.cast<String>();
+        });
+      } else {
+        // Handle error
+        print('API call failed');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception during API call: $e');
+    }
+  }
+  Future<void> fetchQuizData(List<String> word,String selectedLanguage) async {
+    try {
+      final response = await http.post(Uri.parse("https://translation.saeedantechpvt.com/api/app/get-questions"),
       
  headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization':"Bearer "+"${widget.token}", // Replace with your actual auth token
         },
+         body: 
+     jsonEncode({'type': selectedLanguage, 'word': word}),
       
       );
       if (response.statusCode == 200) {
@@ -624,7 +665,7 @@ class _QuizPageState extends State<QuizPage> {
 
   void handleAnswer(String answer) {
     setState(() {
-      selectedAnswer = answer;
+   selectedAnswers[currentIndex] = answer;
     });
   }
 
@@ -635,13 +676,13 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void nextQuestion() {
-    if (selectedAnswer.isNotEmpty && currentIndex < quizData.length - 1) {
+    if (selectedAnswers[currentIndex].isNotEmpty && currentIndex < quizData.length - 1) {
       setState(() {
         currentIndex++;
-        selectedAnswer = ''; // Reset selected answer for the next question
+       // selectedAnswer = ''; // Reset selected answer for the next question
          updateQuizProgress();
       });
-    } else if (selectedAnswer.isEmpty) {
+    } else if (selectedAnswers[currentIndex].isNotEmpty) {
       Fluttertoast.showToast(msg: 'Please Select atleast one');
       // Show an error message because no option is selected
       // showErrorDialog('Please select an answer before proceeding.');
@@ -649,12 +690,12 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void submitQuiz() {
-     if (selectedAnswer.isNotEmpty){
+     if (selectedAnswers[currentIndex].isNotEmpty){
        int correctAnswers = 0;
     int incorrectAnswers = 0;
 
     for (int i = 0; i < quizData.length; i++) {
-      if (selectedAnswer == quizData[i]["correct"]) {
+      if ( quizData[i]["correct"]==selectedAnswers[0]) {
         correctAnswers++;
 
       } else {
@@ -683,6 +724,7 @@ updateQuizProgress();
                 Text('Exam Completed Succesfully',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),), 
                 SizedBox(height: 20,),   
                 Text('You Attempted  ${quizData.length} questions and  $correctAnswers are correct',style: TextStyle(color: Colors.black,fontSize: 25,), ),
+
               //   LinearProgressIndicator(
               //   value: 50.0,
               //   backgroundColor: Colors.grey,
@@ -714,6 +756,20 @@ updateQuizProgress();
    
   }
 
+void calculateResults() {
+    int correctAnswers = 0;
+    int incorrectAnswers = 0;
+
+    for (int i = 0; i < quizData.length; i++) {
+      print(quizData[i]["correct"]);
+      print("sfdqer" + selectedAnswers[0]);
+      if (quizData[i]["correct"] == selectedAnswers[0]) {
+        correctAnswers++;
+      } else {
+        incorrectAnswers++;
+      }
+      print(correctAnswers);
+    }}
    void _showLanguageOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -742,19 +798,23 @@ updateQuizProgress();
     Navigator.of(context).pop();
   }
   String selectedLanguage = 'Select Language';
+  
+TextEditingController searchController = TextEditingController();
 
   @override
+
   Widget build(BuildContext context) {
-    if (quizData.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Loading...'),
-        ),
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
+   // if (quizData.isEmpty) {
+    //   return Scaffold(
+    //     appBar: AppBar(
+    //       title: Text('Loading...'),
+    //     ),
+    //     body: Center(
+    //       child: CircularProgressIndicator(),
+    //     ),
+    //   );
+    // }
+    //  else {
       return Scaffold(
         // appBar: AppBar(
         //   title: Text('Quiz'),
@@ -779,7 +839,9 @@ updateQuizProgress();
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
+                Container(
+                  width: 340.w,
+                  height: 30.h,
                   child: ElevatedButton(
                             onPressed: () {
                               _showLanguageOptions(context);
@@ -793,12 +855,144 @@ updateQuizProgress();
                             ),
                           ),
                 ),
+                SizedBox(height: 20.h,),
+           Column(
+                   children: [
+                     SizedBox(width: 10,),
+                     Container(
+                                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      
+                      border: Border.all(width: 1.w,color: Color(0xFF832CE5
+                     ),),
+                                     ),
+                                     width: 360.w,
+                                     height: 34.h,
+                                     child: TextField(
+                       style: TextStyle(color: Colors.black),
+                                 controller: searchController,
+                                 decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                   hintText: 'Search',
+                                   border: InputBorder.none,
+                                  suffixIcon: IconButton(
+                                     icon: Icon(Icons.search),
+                                     onPressed: () {
+                      if (searchController.text.isNotEmpty) {
+                                     
+                        setState(() {
+                              dataList.length = 0;
+                        });
+                     //   fetchExactTranslation(searchController.text, widget.selectedLanguage,widget.token!);
+                      }
+                                     },
+                                   ),
+                                   
+                                 ),
+                                 onTap: () {
+                                  print(selectedLanguage);
+                                   _fetchSuggestions(selectedLanguage,widget.token!);
+                                 },
+                               ),
+                                   ),
+                                   SizedBox(width: 20,),
+                                     Row(
+                                       children: [
+                                         ElevatedButton(
+                                               onPressed: () async{
+                                               
+                                            await  fetchQuizData(userController.words.value,selectedLanguage);
+                                               },
+                                               style: ElevatedButton.styleFrom(
+                                                 primary:  Color(0xFF832CE5
+                                                         ), // Button color
+                                                 shape: RoundedRectangleBorder(
+                                                   borderRadius: BorderRadius.circular(20.0), // Border radius
+                                                 ),
+                                                 minimumSize: Size(80.w, 29.h), // Width and height
+                                                 
+                                               ),
+                                               child: Text('Quiz by Words',style: TextStyle(color: Colors.white),),
+                                             ),
+                                                                                  SizedBox(width: 20,),
+                                     ElevatedButton(
+      onPressed: () async{
+      //  dataList = 0;
+  // await  _getTranslation(userController.words.value, widget.selectedLanguage);
+    await  fetchQuizData(userController.nullList.value,selectedLanguage);
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Color(0xFF832CE5
+                ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0), // Border radius
+        ),
+        minimumSize: Size(80.w, 29.h), // Width and height
+        
+      ),
+      child: Text('All Quizez',style: TextStyle(color:Colors.white, ),),
+    ),
+                                       ],
+                                     ),
+ 
+                   ],
+                 ),
+                 dataList.length != 0 ? 
+          SingleChildScrollView(
+            child: Container(
+              height: 300,
+              width: 500,
+              child: ListView.builder(
+                itemCount: dataList.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(dataList[index],style: TextStyle(color: Colors.white),),
+                      onTap: () {
+                 //   _getTranslation(dataList[index], widget.selectedLanguage);
+                  },
+                  trailing:   Obx(
+                    ()=> Checkbox(
+                                          value: userController.words
+                                                  .contains(
+                                                  dataList[index]
+                                                      
+                                                      )
+                                              ? true
+                                              : false,
+                                          onChanged: (val) {
+                                            if (userController.words
+                                                .contains(
+                                                dataList[index]
+                                                    
+                                                    )) {
+                                              userController.words.remove(
+                                                  dataList[index]
+                                                      
+                                                      );
+                                            } else {
+                                              userController.words.add(
+                                                dataList[index]
+                                                      
+                                                      );
+                                            }
+                                          }),
+                  ),
+                  );
+                },
+              ),
+            ),
+          )
+          :
+          Container()
+          ,
               //    LinearProgressIndicator(
               //   value: quizProgress,
               //   backgroundColor: Colors.grey,
               //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
               // ),
-                if(selectedLanguage != "Select Language") 
+              quizData.isEmpty ? Container() :
+                //if(selectedLanguage != "Select Language") 
                  Column(
                    children: [
                      Padding(
@@ -827,19 +1021,64 @@ updateQuizProgress();
                   style: TextStyle(fontSize: 30),
                 ),
                  SizedBox(height: 16),
-                Column(
-                  children: [
-                    for (String answer in [quizData[currentIndex]["answer_1"], quizData[currentIndex]["answer_2"]])
-                      RadioListTile<String>(
-                      //  selected: true,
-                        activeColor: Colors.white,
-                        title: Text(answer,style: TextStyle(color: Colors.white),),
-                        value: answer,
-                        groupValue: selectedAnswer,
-                        onChanged: (value) => handleAnswer(value!),
-                      ),
-                  ],
-                ),
+// Column(
+//   children: [
+//     for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
+//       RadioListTile<String>(
+//         title: Text(quizData[currentIndex]["answer_$i"]),
+//         value: "answer_$i",
+//         groupValue: selectedAnswers.isNotEmpty ? selectedAnswers[0] : null,
+//         onChanged: (value) => handleAnswer(value!),
+//       ),
+//   ],
+// ),
+
+
+
+Column(
+              children: [
+                for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
+                  ChoiceRadio(
+                    text: quizData[currentIndex]["answer_$i"],
+                    value: "answer_$i",
+                    groupValue: selectedAnswers.isNotEmpty ? selectedAnswers[0] : null,
+                    onChanged: (value) => setState(() => selectedAnswers = [value!]),
+                  ),
+              ],
+            ),
+                // Column(
+                //   children: [
+                //     for (String answer in [quizData[currentIndex]["answer_1"], quizData[currentIndex]["answer_2"]])
+                //       RadioListTile<String>(
+                //       //  selected: true,
+                //         activeColor: Colors.white,
+                //         title: Text(answer,style: TextStyle(color: Colors.white),),
+                //         value: answer,
+                //         groupValue: selectedAnswerss,
+                //         onChanged: (value) => handleAnswer(value!),
+                //       ),
+                //   ],
+                // ),
+
+                  ElevatedButton(
+              onPressed: () {
+                if (selectedAnswers.isNotEmpty) {
+                  if (currentIndex < quizData.length - 1) {
+                    setState(() {
+                      currentIndex++;
+                      selectedAnswers = [];
+                    });
+                  } else {
+                    // Calculate and display results
+                    calculateResults();
+                  }
+                } else {
+                  // Show an error message because no option is selected
+               //   showErrorDialog('Please select an answer before proceeding.');
+                }
+              },
+              child: Text(currentIndex < quizData.length - 1 ? 'Next' : 'Submit'),
+            ),
                 SizedBox(height: 16),
                 if (currentIndex < quizData.length - 1)
                   ElevatedButton(
@@ -870,8 +1109,10 @@ updateQuizProgress();
           ),
         ),
       );
-    }
+    //}
+    
   }
+  
 }
 class LanguageOption extends StatelessWidget {
   final String language;
@@ -888,3 +1129,33 @@ class LanguageOption extends StatelessWidget {
       },
     );
   }}
+
+
+
+  class ChoiceRadio<T> extends StatelessWidget {
+  final String text;
+  final T value;
+  final T? groupValue;
+  final ValueChanged<T?> onChanged;
+
+  const ChoiceRadio({
+    required this.text,
+    required this.value,
+    required this.groupValue,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Radio<T>(
+          value: value,
+          groupValue: groupValue,
+          onChanged: onChanged,
+        ),
+        Text(text),
+      ],
+    );
+  }
+}
