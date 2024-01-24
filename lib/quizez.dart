@@ -594,7 +594,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   final String apiUrl = "https://translation.saeedantechpvt.com/api/app/get-questions?word=help&type=english to soomaali";
   List<Map<String, dynamic>> quizData = [];
-  List<String> selectedAnswers = [];
+  String selectedAnswers = "";
    String selectedAnswerss = "";
    String groupValue = '';
   int currentIndex = 0;
@@ -662,10 +662,10 @@ print(response.statusCode);
       print("Error: $error");
     }
   }
-
+List<String> Corrects = [];
   void handleAnswer(String answer) {
     setState(() {
-   selectedAnswers[currentIndex] = answer;
+   selectedAnswers = answer;
     });
   }
 
@@ -756,14 +756,15 @@ updateQuizProgress();
    
   }
 
+
 void calculateResults() {
     int correctAnswers = 0;
     int incorrectAnswers = 0;
 
     for (int i = 0; i < quizData.length; i++) {
-      print(quizData[i]["correct"]);
-      print("sfdqer" + selectedAnswers[0]);
-      if (quizData[i]["correct"] == selectedAnswers[0]) {
+      print(quizData);
+      print(  Corrects);
+      if (quizData[i]["correct"] == Corrects[i]) {
         correctAnswers++;
       } else {
         incorrectAnswers++;
@@ -1040,9 +1041,14 @@ Column(
                 for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
                   ChoiceRadio(
                     text: quizData[currentIndex]["answer_$i"],
-                    value: "answer_$i",
-                    groupValue: selectedAnswers.isNotEmpty ? selectedAnswers[0] : null,
-                    onChanged: (value) => setState(() => selectedAnswers = [value!]),
+                    value: quizData[currentIndex]["answer_$i"],
+                    groupValue: selectedAnswers.isNotEmpty ? selectedAnswers : null,
+                    onChanged: (value) => setState(() { 
+                      selectedAnswers = value!;
+                      Corrects.add(value);
+                      print(selectedAnswers);
+                      }
+                    ),
                   ),
               ],
             ),
@@ -1066,7 +1072,7 @@ Column(
                   if (currentIndex < quizData.length - 1) {
                     setState(() {
                       currentIndex++;
-                      selectedAnswers = [];
+                      selectedAnswers = "";
                     });
                   } else {
                     // Calculate and display results
