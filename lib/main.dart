@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:multitranslation/loginPage.dart';
 import 'package:multitranslation/twoThreeSeconds.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 void main() async{
   await GetStorage.init();
    WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
             textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
           ),
           home: child,
+          builder: EasyLoading.init(),
         );
       },
       child: VeryFirstScreen(),

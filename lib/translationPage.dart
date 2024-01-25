@@ -408,11 +408,11 @@ class _NextPageState extends State<NextPage> {
                 child: Column(
                   children: [
                     widget.selectedLanguage == "english"
-                        ? Text("Soomaali")
+                        ? Text("Soomaali",style: TextStyle(color: Colors.black),)
                         : widget.selectedLanguage == "soomaali"
-                            ? Text("English")
+                            ? Text("English",style: TextStyle(color: Colors.black),)
                             : widget.selectedLanguage == "arabic"
-                                ? Text("English")
+                                ? Text("English",style: TextStyle(color: Colors.black),)
                                 : Text(""),
                     Expanded(
                       child: ListView.builder(
@@ -422,14 +422,14 @@ class _NextPageState extends State<NextPage> {
                           print(word);
                           final translations = translationsData![word];
 
-                          return Column(
+                          return Row(
                             children: [
                               widget.selectedLanguage == "english"
-                                  ? Text(translations['soomaali'] ?? '')
+                                  ? Expanded(child: Text(translations['soomaali'] ?? '',style: TextStyle(color: Colors.black),))
                                   : widget.selectedLanguage == "soomaali"
-                                      ? Text(translations['english'] ?? '')
+                                      ? Expanded(child: Text(translations['english'] ?? '',style: TextStyle(color: Colors.black),))
                                       : widget.selectedLanguage == "arabic"
-                                          ? Text(translations['english'] ?? '')
+                                          ? Expanded(child: Text(translations['english'] ?? '',style: TextStyle(color: Colors.black),))
                                           : Text(""),
                               Align(
                                 alignment: Alignment.topRight,
@@ -470,11 +470,11 @@ class _NextPageState extends State<NextPage> {
                 child: Column(
                   children: [
                     widget.selectedLanguage == "english"
-                        ? Text("Arabic")
+                        ? Text("Arabic",style: TextStyle(color: Colors.black),)
                         : widget.selectedLanguage == "soomaali"
-                            ? Text("Arabic")
+                            ? Text("Arabic",style: TextStyle(color: Colors.black),)
                             : widget.selectedLanguage == "arabic"
-                                ? Text("Soomaali")
+                                ? Text("Soomaali",style: TextStyle(color: Colors.black),)
                                 : Text(""),
                     //   Text(translations['arabic'] != null ? 'Arabic' : ''),
 //                     widget.selectedLanguage ==  "english"?    Text(translations['arabic'] ?? ''): widget.selectedLanguage ==  "soomaali" ?Text(translations['arabic'] ?? ''):widget.selectedLanguage ==  "arabic" ?Text(translations['soomaali'] ?? ''):Text(""),
@@ -496,14 +496,14 @@ class _NextPageState extends State<NextPage> {
                           print(word);
                           final translations = translationsData![word];
 
-                          return Column(
+                          return Row(
                             children: [
                               widget.selectedLanguage == "english"
-                                  ? Text(translations['arabic'] ?? '')
+                                  ? Expanded(child: Text(translations['arabic'] ?? '',style: TextStyle(color: Colors.black),))
                                   : widget.selectedLanguage == "soomaali"
-                                      ? Text(translations['arabic'] ?? '')
+                                      ? Expanded(child: Text(translations['arabic'] ?? '',style: TextStyle(color: Colors.black),))
                                       : widget.selectedLanguage == "arabic"
-                                          ? Text(translations['soomaali'] ?? '')
+                                          ? Expanded(child: Text(translations['soomaali'] ?? '',style: TextStyle(color: Colors.black),))
                                           : Text(""),
                               Align(
                                 alignment: Alignment.topRight,

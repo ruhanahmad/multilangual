@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,6 +26,7 @@ class LoginScreen extends StatelessWidget {
     }
 
     try {
+      EasyLoading.show();
       final response = await http.post(
         Uri.parse(
           'https://translation.saeedantechpvt.com/api/auth/login?email=${emailController.text}&password=${passwordController.text}',
@@ -43,10 +45,13 @@ class LoginScreen extends StatelessWidget {
         //   MaterialPageRoute(builder: (context) => LoginScreen()),
         // );
         Get.to(()=>SplashScreen(token: token, userData: userData));
+        EasyLoading.dismiss();
       } else {
+        EasyLoading.dismiss();
         Fluttertoast.showToast(msg: 'Login failed. Please check your credentials.');
       }
     } catch (e) {
+      EasyLoading.dismiss();
       Fluttertoast.showToast(msg: 'Error during login. Please try again.');
     }
   }
