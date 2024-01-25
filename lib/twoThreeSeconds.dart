@@ -23,7 +23,7 @@ class _VeryFirstScreenState extends State<VeryFirstScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -35,7 +35,7 @@ class _VeryFirstScreenState extends State<VeryFirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Color(0xFF832CE5
+      backgroundColor:  const Color(0xFF832CE5
 ),
       body: Center(
         child: Column(
@@ -46,10 +46,10 @@ class _VeryFirstScreenState extends State<VeryFirstScreen> {
               style: TextStyle(fontSize: 20.sp),
             ),
            
-            Container(width: 400.w,height: 250.w,decoration: BoxDecoration(image: DecorationImage(image: AssetImage("asset/image.png"))),),
+            Container(width: 400.w,height: 250.w,decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("asset/image.png"))),),
             SizedBox(height: 30.h),
-            Expanded(child: Padding(
-              padding: const EdgeInsets.all(15.0),
+            const Expanded(child: Padding(
+              padding: EdgeInsets.all(15.0),
               child: Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",style: TextStyle(color: Colors.white),),
             )),
                 

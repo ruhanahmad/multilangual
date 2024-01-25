@@ -712,41 +712,41 @@ updateQuizProgress();
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0XFFB4ACFF) ,
+          backgroundColor: const Color(0XFFB4ACFF) ,
          // title: Text('Quiz Results'),
           content: 
           Container(
             width: 400,
-            color: Color(0XFFB4ACFF),
+            color: const Color(0XFFB4ACFF),
             child: Column(
               children: [
-                Container(height: 203.h,width: 189.w,decoration: BoxDecoration(
+                Container(height: 203.h,width: 189.w,decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage("asset/fram.png",),fit: BoxFit.contain)),),
-                    Text(' ${(correctAnswers / quizData.length * 100).toStringAsFixed(2)}% Score',style: TextStyle(color: Color(0xFF4209BB),fontSize: 48),),
+                    Text(' ${(correctAnswers / quizData.length * 100).toStringAsFixed(2)}% Score',style: const TextStyle(color: Color(0xFF4209BB),fontSize: 48),),
                    
-               widget.language == "soomaali" ?      Text('Hambalyo! ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+               widget.language == "soomaali" ?      const Text('Hambalyo! ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
                :
-               widget.language == "english" ?      Text('Congratulate !',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+               widget.language == "english" ?      const Text('Congratulate !',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
                :
-                widget.language == "arabic" ?      Text('مبروك!  ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),) :Text("")
+                widget.language == "arabic" ?      const Text('مبروك!  ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),) :const Text("")
                , 
 
 
-              widget.language == "english" ?    Text('Exam Completed Succesfully',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+              widget.language == "english" ?    const Text('Exam Completed Succesfully',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
               
               :
-               widget.language == "soomaali" ? Text('Imtixaanki guul baad ku dhameysay',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
+               widget.language == "soomaali" ? const Text('Imtixaanki guul baad ku dhameysay',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),)
               
               :
-              widget.language == "arabic" ? Text("اح االمتحان من االنتهاء ت",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),):Text("")
+              widget.language == "arabic" ? const Text("اح االمتحان من االنتهاء ت",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),):const Text("")
               , 
-                SizedBox(height: 20,),   
-            widget.language == "english" ?      Text('You Attempted  ${quizData.length} questions and  $correctAnswers are answered correct'.tr,style: TextStyle(color: Colors.black,fontSize: 25,), )
+                const SizedBox(height: 20,),   
+            widget.language == "english" ?      Text('You Attempted  ${quizData.length} questions and  $correctAnswers are answered correct'.tr,style: const TextStyle(color: Colors.black,fontSize: 25,), )
             
             :
-             widget.language == "soomaali" ?  Text('Waxaad isku dayday  ${quizData.length} su aalood  $correctAnswers na si sax ah ayaad uga jawaabtay',style: TextStyle(color: Colors.black,fontSize: 25,), )
+             widget.language == "soomaali" ?  Text('Waxaad isku dayday  ${quizData.length} su aalood  $correctAnswers na si sax ah ayaad uga jawaabtay',style: const TextStyle(color: Colors.black,fontSize: 25,), )
              :
-              widget.language == "arabic" ? Text('لقد حاولت   ${quizData.length}  وتمت اإلجابة على  $correctAnswers منها بشكل صحيح',style: TextStyle(color: Colors.black,fontSize: 25,), ) :Text("")
+              widget.language == "arabic" ? Text('لقد حاولت   ${quizData.length}  وتمت اإلجابة على  $correctAnswers منها بشكل صحيح',style: const TextStyle(color: Colors.black,fontSize: 25,), ) :const Text("")
 
             
 
@@ -767,7 +767,7 @@ updateQuizProgress();
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -803,7 +803,7 @@ void calculateResults() {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -849,299 +849,301 @@ TextEditingController searchController = TextEditingController();
         //   elevation: 0.0,
         //   backgroundColor: ,
         // ),
-        body: Container(
-            decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF832CE5), // Top color (#832CE5)
-            Color(0xFF4E3DF8), // Bottom color (#4E3DF8)
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-          child: 
-        
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 340.w,
-                  height: 30.h,
-                  child: ElevatedButton(
-                            onPressed: () {
-                              _showLanguageOptions(context);
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(selectedLanguage),
-                                Icon(Icons.arrow_drop_down),
-                              ],
+        body: SafeArea(
+          child: Container(
+              decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF832CE5), // Top color (#832CE5)
+              Color(0xFF4E3DF8), // Bottom color (#4E3DF8)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+                ),
+            child: 
+          
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 340.w,
+                    height: 30.h,
+                    child: ElevatedButton(
+                              onPressed: () {
+                                _showLanguageOptions(context);
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(selectedLanguage),
+                                  const Icon(Icons.arrow_drop_down),
+                                ],
+                              ),
                             ),
-                          ),
-                ),
-                SizedBox(height: 20.h,),
-           Column(
-                   children: [
-                     SizedBox(width: 10,),
-                     Container(
-                                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      
-                      border: Border.all(width: 1.w,color: Color(0xFF832CE5
-                     ),),
+                  ),
+                  SizedBox(height: 20.h,),
+             Column(
+                     children: [
+                       const SizedBox(width: 10,),
+                       Container(
+                                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        
+                        border: Border.all(width: 1.w,color: const Color(0xFF832CE5
+                       ),),
+                                       ),
+                                       width: 360.w,
+                                       height: 34.h,
+                                       child: TextField(
+                         style: const TextStyle(color: Colors.black),
+                                   controller: searchController,
+                                   decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                     hintText: 'Search',
+                                     border: InputBorder.none,
+                                    suffixIcon: IconButton(
+                                       icon: const Icon(Icons.search),
+                                       onPressed: () {
+                        if (searchController.text.isNotEmpty) {
+                                       
+                          setState(() {
+                                dataList.length = 0;
+                          });
+                       //   fetchExactTranslation(searchController.text, widget.selectedLanguage,widget.token!);
+                        }
+                                       },
                                      ),
-                                     width: 360.w,
-                                     height: 34.h,
-                                     child: TextField(
-                       style: TextStyle(color: Colors.black),
-                                 controller: searchController,
-                                 decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                   hintText: 'Search',
-                                   border: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                     icon: Icon(Icons.search),
-                                     onPressed: () {
-                      if (searchController.text.isNotEmpty) {
                                      
-                        setState(() {
-                              dataList.length = 0;
-                        });
-                     //   fetchExactTranslation(searchController.text, widget.selectedLanguage,widget.token!);
-                      }
-                                     },
                                    ),
-                                   
+                                   onTap: () {
+                                    print(selectedLanguage);
+                                     _fetchSuggestions(selectedLanguage,widget.token!);
+                                   },
                                  ),
-                                 onTap: () {
-                                  print(selectedLanguage);
-                                   _fetchSuggestions(selectedLanguage,widget.token!);
-                                 },
-                               ),
-                                   ),
-                                   SizedBox(width: 20,),
-                                     Row(
-                                       children: [
-                                         ElevatedButton(
-                                               onPressed: () async{
-                                               
-                                            await  fetchQuizData(userController.words.value,selectedLanguage);
-                                               },
-                                               style: ElevatedButton.styleFrom(
-                                                 primary:  Color(0xFF832CE5
-                                                         ), // Button color
-                                                 shape: RoundedRectangleBorder(
-                                                   borderRadius: BorderRadius.circular(20.0), // Border radius
-                                                 ),
-                                                 minimumSize: Size(80.w, 29.h), // Width and height
-                                                 
-                                               ),
-                                               child: Text('Quiz by Words',style: TextStyle(color: Colors.white),),
-                                             ),
-                                                                                  SizedBox(width: 20,),
-                                     ElevatedButton(
-      onPressed: () async{
-      //  dataList = 0;
-  // await  _getTranslation(userController.words.value, widget.selectedLanguage);
-  setState(() {
-     dataList.length = 0;
-  });
- 
-    await  fetchQuizData(userController.nullList.value,selectedLanguage);
-      },
-      style: ElevatedButton.styleFrom(
-        primary: Color(0xFF832CE5
-                ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0), // Border radius
-        ),
-        minimumSize: Size(80.w, 29.h), // Width and height
-        
-      ),
-      child: Text('All Quizez',style: TextStyle(color:Colors.white, ),),
-    ),
-                                       ],
                                      ),
- 
-                   ],
-                 ),
-                 dataList.length != 0 ? 
-          SingleChildScrollView(
-            child: Container(
-              height: 300,
-              width: 500,
-              child: ListView.builder(
-                itemCount: dataList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(dataList[index],style: TextStyle(color: Colors.white),),
-                      onTap: () {
-                 //   _getTranslation(dataList[index], widget.selectedLanguage);
-                  },
-                  trailing:   Obx(
-                    ()=> Checkbox(
-                                          value: userController.words
+                                     const SizedBox(width: 20,),
+                                       Row(
+                                         children: [
+                                           ElevatedButton(
+                                                 onPressed: () async{
+                                                 
+                                              await  fetchQuizData(userController.words.value,selectedLanguage);
+                                                 },
+                                                 style: ElevatedButton.styleFrom(
+                                                   primary:  const Color(0xFF832CE5
+                                                           ), // Button color
+                                                   shape: RoundedRectangleBorder(
+                                                     borderRadius: BorderRadius.circular(20.0), // Border radius
+                                                   ),
+                                                   minimumSize: Size(80.w, 29.h), // Width and height
+                                                   
+                                                 ),
+                                                 child: const Text('Quiz by Words',style: TextStyle(color: Colors.white),),
+                                               ),
+                                                                                    const SizedBox(width: 20,),
+                                       ElevatedButton(
+                onPressed: () async{
+                //  dataList = 0;
+            // await  _getTranslation(userController.words.value, widget.selectedLanguage);
+            setState(() {
+               dataList.length = 0;
+            });
+           
+              await  fetchQuizData(userController.nullList.value,selectedLanguage);
+                },
+                style: ElevatedButton.styleFrom(
+          primary: const Color(0xFF832CE5
+                  ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0), // Border radius
+          ),
+          minimumSize: Size(80.w, 29.h), // Width and height
+          
+                ),
+                child: const Text('All Quizez',style: TextStyle(color:Colors.white, ),),
+              ),
+                                         ],
+                                       ),
+           
+                     ],
+                   ),
+                   dataList.length != 0 ? 
+            SingleChildScrollView(
+              child: Container(
+                height: 300,
+                width: 500,
+                child: ListView.builder(
+                  itemCount: dataList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(dataList[index],style: const TextStyle(color: Colors.white),),
+                        onTap: () {
+                   //   _getTranslation(dataList[index], widget.selectedLanguage);
+                    },
+                    trailing:   Obx(
+                      ()=> Checkbox(
+                                            value: userController.words
+                                                    .contains(
+                                                    dataList[index]
+                                                        
+                                                        )
+                                                ? true
+                                                : false,
+                                            onChanged: (val) {
+                                              if (userController.words
                                                   .contains(
                                                   dataList[index]
                                                       
-                                                      )
-                                              ? true
-                                              : false,
-                                          onChanged: (val) {
-                                            if (userController.words
-                                                .contains(
-                                                dataList[index]
-                                                    
-                                                    )) {
-                                              userController.words.remove(
+                                                      )) {
+                                                userController.words.remove(
+                                                    dataList[index]
+                                                        
+                                                        );
+                                              } else {
+                                                userController.words.add(
                                                   dataList[index]
-                                                      
-                                                      );
-                                            } else {
-                                              userController.words.add(
-                                                dataList[index]
-                                                      
-                                                      );
-                                            }
-                                          }),
-                  ),
-                  );
-                },
-              ),
-            ),
-          )
-          :
-          Container()
-          ,
-              //    LinearProgressIndicator(
-              //   value: quizProgress,
-              //   backgroundColor: Colors.grey,
-              //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              // ),
-              quizData.isEmpty ? Container() :
-                //if(selectedLanguage != "Select Language") 
-                 Column(
-                   children: [
-                     Padding(
-                                   padding: EdgeInsets.all(15.0),
-                                   child:  
-                                   LinearPercentIndicator(
-                                     width: 400.0,
-                                     lineHeight: 30.0,
-                                     percent: quizProgress,
-                                     center: Text(
-                      ' ${(quizProgress * 100).toStringAsFixed(2)}%',
-                      style: TextStyle(fontSize: 12.0),
-                                     ),
-                                     linearStrokeCap: LinearStrokeCap.roundAll,
-                                     backgroundColor: Colors.grey,
-                                     progressColor: Colors.blue,
-                                   ),
-                                 ),
-                                   Text(
-                  'Question: ${currentIndex}',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 20,),
-                Text(
-              "${quizData[currentIndex]["question"]}",
-                  style: TextStyle(fontSize: 30),
-                ),
-                 SizedBox(height: 16),
-// Column(
-//   children: [
-//     for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
-//       RadioListTile<String>(
-//         title: Text(quizData[currentIndex]["answer_$i"]),
-//         value: "answer_$i",
-//         groupValue: selectedAnswers.isNotEmpty ? selectedAnswers[0] : null,
-//         onChanged: (value) => handleAnswer(value!),
-//       ),
-//   ],
-// ),
-
-
-
-Column(
-              children: [
-                for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
-                  ChoiceRadio(
-                    text: quizData[currentIndex]["answer_$i"],
-                    value: quizData[currentIndex]["answer_$i"],
-                    groupValue: selectedAnswers.isNotEmpty ? selectedAnswers : null,
-                    onChanged: (value) => setState(() { 
-                      selectedAnswers = value!;
-                      Corrects.add(value);
-                      print(selectedAnswers);
-                      }
+                                                        
+                                                        );
+                                              }
+                                            }),
                     ),
-                  ),
-              ],
-            ),
-                // Column(
-                //   children: [
-                //     for (String answer in [quizData[currentIndex]["answer_1"], quizData[currentIndex]["answer_2"]])
-                //       RadioListTile<String>(
-                //       //  selected: true,
-                //         activeColor: Colors.white,
-                //         title: Text(answer,style: TextStyle(color: Colors.white),),
-                //         value: answer,
-                //         groupValue: selectedAnswerss,
-                //         onChanged: (value) => handleAnswer(value!),
-                //       ),
-                //   ],
+                    );
+                  },
+                ),
+              ),
+            )
+            :
+            Container()
+            ,
+                //    LinearProgressIndicator(
+                //   value: quizProgress,
+                //   backgroundColor: Colors.grey,
+                //   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                 // ),
-
-            //       ElevatedButton(
-            //   onPressed: () {
-            //     if (selectedAnswers.isNotEmpty) {
-            //       if (currentIndex < quizData.length - 1) {
-            //         setState(() {
-            //           currentIndex++;
-            //           selectedAnswers = "";
-            //         });
-            //       } else {
-            //         // Calculate and display results
-            //         calculateResults();
-            //       }
-            //     } else {
-            //       // Show an error message because no option is selected
-            //    //   showErrorDialog('Please select an answer before proceeding.');
-            //     }
-            //   },
-            //   child: Text(currentIndex < quizData.length - 1 ? 'Next' : 'Submit'),
-            // ),
-                SizedBox(height: 16),
-                if (currentIndex < quizData.length - 1)
-                  ElevatedButton(
-                    onPressed: nextQuestion,
-                    child: Text('Next'),
-                  )
-                else
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: submitQuiz,
-                        child: Text('Submit'),
-                      ),
-                      // ElevatedButton(
-                      //   onPressed: submitQuiz,
-                      //   child: Text('Next Question'),
-                      // ), 
-                    ],
+                quizData.isEmpty ? Container() :
+                  //if(selectedLanguage != "Select Language") 
+                   Column(
+                     children: [
+                       Padding(
+                                     padding: const EdgeInsets.all(15.0),
+                                     child:  
+                                     LinearPercentIndicator(
+                                       width: 400.0,
+                                       lineHeight: 30.0,
+                                       percent: quizProgress,
+                                       center: Text(
+                        ' ${(quizProgress * 100).toStringAsFixed(2)}%',
+                        style: const TextStyle(fontSize: 12.0),
+                                       ),
+                                       linearStrokeCap: LinearStrokeCap.roundAll,
+                                       backgroundColor: Colors.grey,
+                                       progressColor: Colors.blue,
+                                     ),
+                                   ),
+                                     Text(
+                    'Question: ${currentIndex}',
+                    style: const TextStyle(fontSize: 18),
                   ),
-                   ],
-                 ),
+                  const SizedBox(height: 20,),
+                  Text(
+                "${quizData[currentIndex]["question"]}",
+                    style: const TextStyle(fontSize: 30),
+                  ),
+                   const SizedBox(height: 16),
+          // Column(
+          //   children: [
+          //     for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
+          //       RadioListTile<String>(
+          //         title: Text(quizData[currentIndex]["answer_$i"]),
+          //         value: "answer_$i",
+          //         groupValue: selectedAnswers.isNotEmpty ? selectedAnswers[0] : null,
+          //         onChanged: (value) => handleAnswer(value!),
+          //       ),
+          //   ],
+          // ),
+          
+          
+          
+          Column(
+                children: [
+                  for (var i = 1; quizData[currentIndex]["answer_$i"] != null; i++)
+                    ChoiceRadio(
+                      text: quizData[currentIndex]["answer_$i"],
+                      value: quizData[currentIndex]["answer_$i"],
+                      groupValue: selectedAnswers.isNotEmpty ? selectedAnswers : null,
+                      onChanged: (value) => setState(() { 
+                        selectedAnswers = value!;
+                        Corrects.add(value);
+                        print(selectedAnswers);
+                        }
+                      ),
+                    ),
+                ],
+              ),
+                  // Column(
+                  //   children: [
+                  //     for (String answer in [quizData[currentIndex]["answer_1"], quizData[currentIndex]["answer_2"]])
+                  //       RadioListTile<String>(
+                  //       //  selected: true,
+                  //         activeColor: Colors.white,
+                  //         title: Text(answer,style: TextStyle(color: Colors.white),),
+                  //         value: answer,
+                  //         groupValue: selectedAnswerss,
+                  //         onChanged: (value) => handleAnswer(value!),
+                  //       ),
+                  //   ],
+                  // ),
+          
+              //       ElevatedButton(
+              //   onPressed: () {
+              //     if (selectedAnswers.isNotEmpty) {
+              //       if (currentIndex < quizData.length - 1) {
+              //         setState(() {
+              //           currentIndex++;
+              //           selectedAnswers = "";
+              //         });
+              //       } else {
+              //         // Calculate and display results
+              //         calculateResults();
+              //       }
+              //     } else {
+              //       // Show an error message because no option is selected
+              //    //   showErrorDialog('Please select an answer before proceeding.');
+              //     }
+              //   },
+              //   child: Text(currentIndex < quizData.length - 1 ? 'Next' : 'Submit'),
+              // ),
+                  const SizedBox(height: 16),
+                  if (currentIndex < quizData.length - 1)
+                    ElevatedButton(
+                      onPressed: nextQuestion,
+                      child: const Text('Next'),
+                    )
+                  else
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: submitQuiz,
+                          child: const Text('Submit'),
+                        ),
+                        // ElevatedButton(
+                        //   onPressed: submitQuiz,
+                        //   child: Text('Next Question'),
+                        // ), 
+                      ],
+                    ),
+                     ],
+                   ),
+                  
+                 
+                  
+                ],
                 
-               
-                
-              ],
-              
+              ),
             ),
           ),
         ),

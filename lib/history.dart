@@ -53,7 +53,7 @@ print(response.statusCode);
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search History'),
+        title: const Text('Search History'),
       ),
       body: ListView.builder(
         itemCount: dates.length,
@@ -68,7 +68,7 @@ print(response.statusCode);
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   date,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -76,7 +76,7 @@ print(response.statusCode);
               ),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: dateData.length,
                 itemBuilder: (context, innerIndex) {
                   final searchItem = dateData[innerIndex];
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: Text(""),
+          title: const Text(""),
         ),
         body: Center(
             // Center is a layout widget. It takes a single child and positions it
@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       Text(
                         date,
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17,color: Colors.black),
+                        style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 17,color: Colors.black),
                       ), // Display the date
 
                       // Display the list of items for the current date
@@ -179,11 +179,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Selected Language:"+items[index].selectedLang.toString(),style: TextStyle(color: Colors.black),),
-                                Text("Word:"+items[index].word.toString(),style: TextStyle(color: Colors.black),),
-                                Text("Translations: "+items[index].trans1.toString()+", "+items[index].trans2.toString(),style: TextStyle(color: Colors.black),),
+                                Text("Selected Language:"+items[index].selectedLang.toString(),style: const TextStyle(color: Colors.black),),
+                                Text("Word:"+items[index].word.toString(),style: const TextStyle(color: Colors.black),),
+                                Text("Translations: "+items[index].trans1.toString()+", "+items[index].trans2.toString(),style: const TextStyle(color: Colors.black),),
                              
-                                Divider(),
+                                const Divider(),
                                 // Add other widgets to display other item details
                               ],
                             ),

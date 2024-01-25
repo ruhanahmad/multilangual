@@ -12,6 +12,8 @@ import 'package:multitranslation/controller/languageController.dart';
 import 'package:multitranslation/controller/userController.dart';
 import 'package:multitranslation/loginPage.dart';
 import 'package:multitranslation/profile.dart';
+import 'package:multitranslation/storage/keys.dart';
+import 'package:multitranslation/storage/storage.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'controller/languageController.dart';
@@ -62,8 +64,10 @@ class _NextPageState extends State<NextPage> {
               "${widget.token}", // Replace with your actual auth token
         },
       );
- Get.to(() => LoginScreen());
+
+      Get.to(() => LoginScreen());
       if (response.statusCode == 200) {
+        await StorageServices.to.remove(userToken);
         final Map<String, dynamic> data = json.decode(response.body);
         final String message = data['message'];
         // final Map<String, dynamic> userData = data['data']['user'];
@@ -82,11 +86,12 @@ class _NextPageState extends State<NextPage> {
       Fluttertoast.showToast(msg: 'Error during login. Please try again.');
     }
   }
+
   Future<void> textToSpeech({required String textToSpeak}) async {
     // final String apiKey = Platform.environment['SnAEBdbq564owoayOZpBX1YvRVZTlzaO5Qkbluo6'] ?? '';
     const String voice = 'mickey';
     //const String text = 'Hello, ruhan sir how are you?';
-    final String url =
+    const String url =
         'https://api.narakeet.com/text-to-speech/mp3?voice=$voice';
 
     // if (apiKey.isEmpty) {
@@ -134,10 +139,12 @@ class _NextPageState extends State<NextPage> {
       UrlSource(filePath),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final userController = Get.put(UserController());
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           //            ElevatedButton(
@@ -158,7 +165,8 @@ class _NextPageState extends State<NextPage> {
           ElevatedButton(
             onPressed: () async {
               // Handle button press
-              Get.to(() => QuizPage(token: widget.token,language:widget.selectedLanguage));
+              Get.to(() => QuizPage(
+                  token: widget.token, language: widget.selectedLanguage));
             },
             style: ElevatedButton.styleFrom(
               primary: Colors.white,
@@ -167,26 +175,24 @@ class _NextPageState extends State<NextPage> {
               ),
               minimumSize: Size(20.w, 29.h), // Width and height
             ),
-            child:
-            
-            widget.selectedLanguage == "soomaali" ?
-             Text(
-              'Leeyli & Imtixaan',
-              style: TextStyle(color: Color(0xFF573AF5), fontSize: 12),
-            )
-            :
-             widget.selectedLanguage == "english" ?
-              Text(
-              'Exercise & Quizzes',
-              style: TextStyle(color: Color(0xFF573AF5), fontSize: 12),
-            )
-            :
-             widget.selectedLanguage == "arabic" ?
-             Text(
-              'تحان تم',
-              style: TextStyle(color: Color(0xFF573AF5), fontSize: 12),
-            ):
-            Text(""),
+            child: widget.selectedLanguage == "soomaali"
+                ? const Text(
+                    'Leeyli & Imtixaan',
+                    style: TextStyle(color: Color(0xFF573AF5), fontSize: 12),
+                  )
+                : widget.selectedLanguage == "english"
+                    ? const Text(
+                        'Exercise & Quizzes',
+                        style:
+                            TextStyle(color: Color(0xFF573AF5), fontSize: 12),
+                      )
+                    : widget.selectedLanguage == "arabic"
+                        ? const Text(
+                            'تحان تم',
+                            style: TextStyle(
+                                color: Color(0xFF573AF5), fontSize: 12),
+                          )
+                        : const Text(""),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -194,18 +200,18 @@ class _NextPageState extends State<NextPage> {
               await logOut();
             },
             style: ElevatedButton.styleFrom(
-              primary: Color(0xFF832CE5), // Button color
+              primary: const Color(0xFF832CE5), // Button color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0), // Border radius
               ),
               minimumSize: Size(80.w, 29.h), // Width and height
             ),
-            child: Text(
+            child: const Text(
               'Log Out',
               style: TextStyle(color: Colors.white),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           GestureDetector(
@@ -213,7 +219,7 @@ class _NextPageState extends State<NextPage> {
               Get.to(() => UserDetailsScreen(
                   token: widget.token!, userData: widget.userData!));
             },
-            child: CircleAvatar(
+            child: const CircleAvatar(
               radius: 40,
               backgroundColor: Colors.blue,
               child: CircleAvatar(
@@ -275,66 +281,114 @@ class _NextPageState extends State<NextPage> {
               ),
             ],
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    width: 1.w,
-                    color: Color(0xFF832CE5),
-                  ),
-                ),
-                width: 240.w,
-                height: 44.h,
-                child: TextField(
-                  style: TextStyle(color: Colors.black),
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search'.tr,
-                    border: InputBorder.none,
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        if (searchController.text.isNotEmpty) {
-                          setState(() {
-                            dataList.length = 0;
-                          });
-                          fetchExactTranslation(searchController.text,
-                              widget.selectedLanguage, widget.token!);
-                        }
-                      },
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(left: 10),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          if (searchController.text.isNotEmpty) {
+                            setState(() {
+                              dataList.length = 0;
+                            });
+                            fetchExactTranslation(searchController.text,
+                                widget.selectedLanguage, widget.token!);
+                          }
+                        },
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                          borderSide:
+                              BorderSide(color: Color(0xFF832CE5), width: 2)),
+                      enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                          borderSide: BorderSide(color: Color(0xFF832CE5))),
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                          borderSide: BorderSide(color: Color(0xFF832CE5))),
+                      hintText: 'Search'.tr,
                     ),
+                    onTap: () {
+                      _fetchSuggestions(widget.selectedLanguage, widget.token!);
+                    },
                   ),
-                  onTap: () {
-                    _fetchSuggestions(widget.selectedLanguage, widget.token!);
+                ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(20),
+                //     border: Border.all(
+                //       width: 1.w,
+                //       color: const Color(0xFF832CE5),
+                //     ),
+                //   ),
+                //   width: 240.w,
+                //   height: 44.h,
+                //   child: TextField(
+                //     style: const TextStyle(color: Colors.black),
+                //     controller: searchController,
+                //     decoration: InputDecoration(
+                //       hintText: 'Search'.tr,
+                //       border: InputBorder.none,
+                // suffixIcon: IconButton(
+                //   icon: const Icon(Icons.search),
+                //   onPressed: () {
+                //     if (searchController.text.isNotEmpty) {
+                //       setState(() {
+                //         dataList.length = 0;
+                //       });
+                //       fetchExactTranslation(searchController.text,
+                //           widget.selectedLanguage, widget.token!);
+                //     }
+                //   },
+                // ),
+                // ),
+                //   onTap: () {
+                //     _fetchSuggestions(widget.selectedLanguage, widget.token!);
+                //   },
+                // ),
+                // ),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    await _getTranslation(
+                            userController.words.value, widget.selectedLanguage)
+                        .then((value) => FocusScope.of(context).unfocus());
                   },
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  await _getTranslation(
-                      userController.words.value, widget.selectedLanguage);
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF832CE5), // Button color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0), // Border radius
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF832CE5), // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(20.0), // Border radius
+                    ),
+                    minimumSize: Size(80.w, 29.h), // Width and height
                   ),
-                  minimumSize: Size(80.w, 29.h), // Width and height
+                  child: const Text(
+                    'Search',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-                child: Text(
-                  'Search',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
 
           // TextField(
@@ -403,17 +457,26 @@ class _NextPageState extends State<NextPage> {
               Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width / 2,
-                padding: EdgeInsets.all(16),
-                color: Color(0xFFB4ACFF),
+                padding: const EdgeInsets.all(16),
+                color: const Color(0xFFB4ACFF),
                 child: Column(
                   children: [
                     widget.selectedLanguage == "english"
-                        ? Text("Soomaali",style: TextStyle(color: Colors.black),)
+                        ? const Text(
+                            "Soomaali",
+                            style: TextStyle(color: Colors.black),
+                          )
                         : widget.selectedLanguage == "soomaali"
-                            ? Text("English",style: TextStyle(color: Colors.black),)
+                            ? const Text(
+                                "English",
+                                style: TextStyle(color: Colors.black),
+                              )
                             : widget.selectedLanguage == "arabic"
-                                ? Text("English",style: TextStyle(color: Colors.black),)
-                                : Text(""),
+                                ? const Text(
+                                    "English",
+                                    style: TextStyle(color: Colors.black),
+                                  )
+                                : const Text(""),
                     Expanded(
                       child: ListView.builder(
                         itemCount: translations.length,
@@ -425,20 +488,36 @@ class _NextPageState extends State<NextPage> {
                           return Row(
                             children: [
                               widget.selectedLanguage == "english"
-                                  ? Expanded(child: Text(translations['soomaali'] ?? '',style: TextStyle(color: Colors.black),))
+                                  ? Expanded(
+                                      child: Text(
+                                      translations['soomaali'] ?? '',
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    ))
                                   : widget.selectedLanguage == "soomaali"
-                                      ? Expanded(child: Text(translations['english'] ?? '',style: TextStyle(color: Colors.black),))
+                                      ? Expanded(
+                                          child: Text(
+                                          translations['english'] ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ))
                                       : widget.selectedLanguage == "arabic"
-                                          ? Expanded(child: Text(translations['english'] ?? '',style: TextStyle(color: Colors.black),))
-                                          : Text(""),
+                                          ? Expanded(
+                                              child: Text(
+                                              translations['english'] ?? '',
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                            ))
+                                          : const Text(""),
                               Align(
                                 alignment: Alignment.topRight,
                                 child: IconButton(
-                                  icon: Icon(Icons.volume_up),
+                                  icon: const Icon(Icons.volume_up),
                                   onPressed: () {
                                     widget.selectedLanguage == "english"
-                                        ? 
-                                        textToSpeech(textToSpeak: translations['soomaali'])
+                                        ? textToSpeech(
+                                            textToSpeak:
+                                                translations['soomaali'])
                                         // speak(
                                         //     translations['soomaali'], "so-SO")
                                         : widget.selectedLanguage == "soomaali"
@@ -448,7 +527,7 @@ class _NextPageState extends State<NextPage> {
                                                     "arabic"
                                                 ? speak(translations['english'],
                                                     "en-US")
-                                                : Text(
+                                                : const Text(
                                                     ""); // Replace with your dynamic text
                                   },
                                   // child: Text('Play Audio'),
@@ -465,17 +544,26 @@ class _NextPageState extends State<NextPage> {
               Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width / 2,
-                padding: EdgeInsets.all(16),
-                color: Color(0xFFE1C7FF),
+                padding: const EdgeInsets.all(16),
+                color: const Color(0xFFE1C7FF),
                 child: Column(
                   children: [
                     widget.selectedLanguage == "english"
-                        ? Text("Arabic",style: TextStyle(color: Colors.black),)
+                        ? const Text(
+                            "Arabic",
+                            style: TextStyle(color: Colors.black),
+                          )
                         : widget.selectedLanguage == "soomaali"
-                            ? Text("Arabic",style: TextStyle(color: Colors.black),)
+                            ? const Text(
+                                "Arabic",
+                                style: TextStyle(color: Colors.black),
+                              )
                             : widget.selectedLanguage == "arabic"
-                                ? Text("Soomaali",style: TextStyle(color: Colors.black),)
-                                : Text(""),
+                                ? const Text(
+                                    "Soomaali",
+                                    style: TextStyle(color: Colors.black),
+                                  )
+                                : const Text(""),
                     //   Text(translations['arabic'] != null ? 'Arabic' : ''),
 //                     widget.selectedLanguage ==  "english"?    Text(translations['arabic'] ?? ''): widget.selectedLanguage ==  "soomaali" ?Text(translations['arabic'] ?? ''):widget.selectedLanguage ==  "arabic" ?Text(translations['soomaali'] ?? ''):Text(""),
 //                     Align(
@@ -499,16 +587,31 @@ class _NextPageState extends State<NextPage> {
                           return Row(
                             children: [
                               widget.selectedLanguage == "english"
-                                  ? Expanded(child: Text(translations['arabic'] ?? '',style: TextStyle(color: Colors.black),))
+                                  ? Expanded(
+                                      child: Text(
+                                      translations['arabic'] ?? '',
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                    ))
                                   : widget.selectedLanguage == "soomaali"
-                                      ? Expanded(child: Text(translations['arabic'] ?? '',style: TextStyle(color: Colors.black),))
+                                      ? Expanded(
+                                          child: Text(
+                                          translations['arabic'] ?? '',
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ))
                                       : widget.selectedLanguage == "arabic"
-                                          ? Expanded(child: Text(translations['soomaali'] ?? '',style: TextStyle(color: Colors.black),))
-                                          : Text(""),
+                                          ? Expanded(
+                                              child: Text(
+                                              translations['soomaali'] ?? '',
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                            ))
+                                          : const Text(""),
                               Align(
                                 alignment: Alignment.topRight,
                                 child: IconButton(
-                                  icon: Icon(Icons.volume_up),
+                                  icon: const Icon(Icons.volume_up),
                                   onPressed: () {
                                     widget.selectedLanguage == "english"
                                         ? speak(translations['arabic'], "ar")
@@ -517,8 +620,10 @@ class _NextPageState extends State<NextPage> {
                                                 translations['arabic'], "ar")
                                             : widget.selectedLanguage ==
                                                     "arabic"
-                                                ? textToSpeech(textToSpeak: translations['soomaali'])
-                                                : Text(
+                                                ? textToSpeech(
+                                                    textToSpeak: translations[
+                                                        'soomaali'])
+                                                : const Text(
                                                     ""); // Replace with your dynamic text
                                   },
                                   // child: Text('Play Audio'),
@@ -574,10 +679,9 @@ class _NextPageState extends State<NextPage> {
   }
 
   Map<String, dynamic>? translationsData;
-  
+
   Future<void> _getTranslation(List<String> word, String lang) async {
     try {
-
       print(word);
       print(lang);
       final response = await http.post(
@@ -603,13 +707,13 @@ class _NextPageState extends State<NextPage> {
       } else {
         Fluttertoast.showToast(
             msg: 'Failed to get translation. Please try again.');
-            userController.words.clear();
-      //  final userController = Get.put(UserController());
+        userController.words.clear();
+        //  final userController = Get.put(UserController());
       }
     } catch (e) {
       Fluttertoast.showToast(msg: '${e}');
       userController.words.clear();
-     // final userController = Get.put(UserController());
+      // final userController = Get.put(UserController());
       print(e);
     }
   }
