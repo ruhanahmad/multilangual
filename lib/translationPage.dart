@@ -89,7 +89,7 @@ class _NextPageState extends State<NextPage> {
 
   Future<void> textToSpeech({required String textToSpeak}) async {
     // final String apiKey = Platform.environment['SnAEBdbq564owoayOZpBX1YvRVZTlzaO5Qkbluo6'] ?? '';
-    const String voice = 'mickey';
+    const String voice = 'Cabdi';
     //const String text = 'Hello, ruhan sir how are you?';
     const String url =
         'https://api.narakeet.com/text-to-speech/mp3?voice=$voice';
