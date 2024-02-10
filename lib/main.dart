@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:multitranslation/loginPage.dart';
+import 'package:multitranslation/paymentScreen.dart';
 import 'package:multitranslation/splashpage.dart';
 import 'package:multitranslation/storage/keys.dart';
 import 'package:multitranslation/storage/storage.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         );
       },
       child: StorageServices.to.getString(userToken).isNotEmpty
-          ? SplashScreen()
+          ? PaymentScreen()
           : VeryFirstScreen(),
     );
   }
