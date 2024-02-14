@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:multitranslation/const.dart';
 import 'package:multitranslation/forgetPassword.dart';
+import 'package:multitranslation/selectPayment.dart';
 import 'package:multitranslation/signUp.dart';
 import 'package:multitranslation/signupPage.dart';
 import 'package:multitranslation/splashpage.dart';
@@ -43,7 +44,8 @@ class LoginScreen extends StatelessWidget {
         //   context,
         //   MaterialPageRoute(builder: (context) => LoginScreen()),
         // );
-        Get.to(() => SplashScreen(token: token, userData: userData));
+        Get.to(() => SelectPaymentMethods(token: token, userData: userData));
+        // Get.to(() => SplashScreen(token: token, userData: userData));
         EasyLoading.dismiss();
       } else {
         EasyLoading.dismiss();
@@ -85,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
-                            "asset/pik.png",
+                            "assets/pik.png",
                           ),
                           fit: BoxFit.contain)),
                 ),
@@ -105,7 +107,6 @@ class LoginScreen extends StatelessWidget {
               TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: emailController,
-              
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero,
                     prefixIcon: Icon(

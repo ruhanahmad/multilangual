@@ -111,7 +111,7 @@ class SignUpScreen extends StatelessWidget {
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
-                            "asset/pik.png",
+                            "assets/pik.png",
                           ),
                           fit: BoxFit.contain)),
                 ),
@@ -155,7 +155,7 @@ class SignUpScreen extends StatelessWidget {
                         borderSide: BorderSide(color: Color(0xFF832CE5))),
                     hintText: 'First Name'),
               ),
-           SizedBox(height: 16.h),
+              SizedBox(height: 16.h),
               TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: lastNameController,
@@ -184,10 +184,9 @@ class SignUpScreen extends StatelessWidget {
                     hintText: 'Last Name'),
               ),
               SizedBox(height: 16.h),
-               TextField(
+              TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: emailController,
-              
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero,
                     prefixIcon: Icon(
@@ -213,10 +212,10 @@ class SignUpScreen extends StatelessWidget {
                     hintText: 'Email'),
               ),
               SizedBox(height: 16.h),
-                TextField(
+              TextField(
                 style: const TextStyle(color: Colors.black),
                 controller: passwordController,
-              obscureText: true,
+                obscureText: true,
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero,
                     prefixIcon: Icon(
@@ -259,7 +258,9 @@ class SignUpScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               RichText(
                 text: TextSpan(
                   text: "Already have an account ? ",

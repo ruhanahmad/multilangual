@@ -5,10 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:multitranslation/loginPage.dart';
 import 'package:multitranslation/translationPage.dart';
 
-
-
-
-
 class VeryFirstScreen extends StatefulWidget {
 //     String? token;
 //    Map<String, dynamic>? userData;
@@ -35,8 +31,7 @@ class _VeryFirstScreenState extends State<VeryFirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  const Color(0xFF832CE5
-),
+      backgroundColor: const Color(0xFF832CE5),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -45,14 +40,24 @@ class _VeryFirstScreenState extends State<VeryFirstScreen> {
               'Multilingual Glossary App',
               style: TextStyle(fontSize: 20.sp),
             ),
-           
-            Container(width: 400.w,height: 250.w,decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("asset/image.png"))),),
+
+            Container(
+              width: 400.w,
+              height: 250.w,
+              decoration: const BoxDecoration(
+                  image:
+                      DecorationImage(image: AssetImage("assets/image.png"))),
+            ),
             SizedBox(height: 30.h),
-            const Expanded(child: Padding(
+            const Expanded(
+                child: Padding(
               padding: EdgeInsets.all(15.0),
-              child: Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",style: TextStyle(color: Colors.white),),
+              child: Text(
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+                style: TextStyle(color: Colors.white),
+              ),
             )),
-                
+
             // ElevatedButton(
             //   onPressed: () {
             //     if (selectedLanguage.isNotEmpty) {
@@ -89,11 +94,10 @@ class LanguageButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: isSelected ? MaterialStateProperty.all(Colors.blue) : null,
+        backgroundColor:
+            isSelected ? MaterialStateProperty.all(Colors.blue) : null,
       ),
       child: Text(language),
     );
   }
 }
-
-

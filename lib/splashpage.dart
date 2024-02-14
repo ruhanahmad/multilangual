@@ -75,13 +75,14 @@ class _SplashScreenState extends State<SplashScreen> {
                     height: 200.w,
                     decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage("asset/applogop.png"),fit: BoxFit.cover)),
+                            image: AssetImage("assets/applogop.png"),
+                            fit: BoxFit.cover)),
                   ),
                   SizedBox(height: 5.h),
-                    Text(
-                      "HORUMARKAAL APP (Ver. 01 - year 2024)",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  Text(
+                    "HORUMARKAAL APP (Ver. 01 - year 2024)",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   const Expanded(
                       child: Padding(
                     padding: EdgeInsets.all(15.0),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
+//import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 import 'package:multitranslation/loginPage.dart';
 import 'package:multitranslation/paymentScreen.dart';
+import 'package:multitranslation/selectPayment.dart';
 import 'package:multitranslation/splashpage.dart';
 import 'package:multitranslation/storage/keys.dart';
 import 'package:multitranslation/storage/storage.dart';
@@ -12,10 +13,10 @@ import 'package:multitranslation/twoThreeSeconds.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
-  MpesaFlutterPlugin.setConsumerKey(
-      "B2qlFEVmMT5Ls2VtPwpveQdTE54bRtuQktBFGG51mS1ozU97");
-  MpesaFlutterPlugin.setConsumerSecret(
-      "vtqKbajz1AwnPplw6mSGB5tLkuwjjlUQdyLkFDN94SCllw0ldc7B0ip5ruf6XOQP");
+  // MpesaFlutterPlugin.setConsumerKey(
+  //     "B2qlFEVmMT5Ls2VtPwpveQdTE54bRtuQktBFGG51mS1ozU97");
+  // MpesaFlutterPlugin.setConsumerSecret(
+  //     "vtqKbajz1AwnPplw6mSGB5tLkuwjjlUQdyLkFDN94SCllw0ldc7B0ip5ruf6XOQP");
   // await GetStorage.init();
   await StorageServices.to.init();
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
         );
       },
       child: StorageServices.to.getString(userToken).isNotEmpty
-          ? PaymentScreen()
+          ? SelectPaymentMethods()
           : VeryFirstScreen(),
     );
   }
